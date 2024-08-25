@@ -8,4 +8,4 @@ const signup = (req,res,next)=>{
 
 
 
-export default signup;
+module.exports=signup;
