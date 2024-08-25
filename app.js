@@ -1,8 +1,11 @@
 
 import express from 'express';
+import authRoute from './routes/authRoute.js';
+import dotenv from 'dotenv'
 
 const app =express();
-
+dotenv.config();
+const PORT = process.env.PORT || 4000;
 
 app.get('/', (req,res)=>{
     res.status(200).json({
@@ -11,8 +14,17 @@ app.get('/', (req,res)=>{
     })
 })
 
+app.use('/api/v1/auth', authRoute)
 
 
-app.listen(3000, ()=>{
-    console.log('Server is running on port 3000')
+
+app.use('*',(req,res, next)=>{
+    res.status(404).json({
+        status: 'error',
+        message: 'Resource not found'
+    })
+})
+
+app.listen(PORT, ()=>{
+    console.log('Server is running on port', PORT)
 } )
