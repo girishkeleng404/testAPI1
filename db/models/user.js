@@ -1,6 +1,6 @@
  'use strict';
 const { Model, Sequelize } = require('sequelize');
-const sequelize = require('../../config/database').default;
+const sequelize = require('../../config/database');
 
 module.exports = sequelize.define('user', {
   id: {
