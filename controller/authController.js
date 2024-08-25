@@ -1,4 +1,4 @@
-const signup = (req,res,next)=>{
+exports.signup = (req,res,next)=>{
     res.json({
         status: 'success',
         massage: 'Signup successful',
@@ -8,4 +8,4 @@ const signup = (req,res,next)=>{
 
 
 
-module.exports=signup;
+// module.exports=signup;
