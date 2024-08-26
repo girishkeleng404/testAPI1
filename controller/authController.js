@@ -17,6 +17,7 @@ exports.signup = async (req,res,next)=>{
         lastName: body.lastName,
         email: body.email,
         password: body.password,
+        confirmPassword: body.confirmPassword,
       }
     );
     
@@ -39,3 +40,4 @@ exports.signup = async (req,res,next)=>{
 
 
 // module.exports=signup;
+// 38.00
