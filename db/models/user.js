@@ -29,7 +29,7 @@ module.exports = sequelize.define('user', {
     type: DataTypes.VIRTUAL,
     set(value){
       if(value === this.password){
-           const hashPassword = bcrypt.hashSync(value, 10);
+           const hashPassword =  bcrypt.hashSync(value, 10);
            this.setDataValue('password', hashPassword);
       } else{
         throw new Error('Password and confirm password do not match');
