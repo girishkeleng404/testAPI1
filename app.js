@@ -9,24 +9,16 @@ const globleErrorHandler = require('./controller/errorController.js');
 const app = express();
 dotenv.config();
 const PORT = process.env.APP_PORT || 4000;
-
-
-
+ 
 app.use(express.json());
 
-
-app.get('/', (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        message: 'Welcome to the API'
-    });
-});
+ 
 
 app.use('/api/v1/auth', authRoute);
 
 app.use('*', catchAsync(async (req, res, next) => {
     // return next( new Error('Resource not found'))
-    throw new AppError('Resource not found', 404);
+    throw new AppError(`Can't find ${req.originalUrl} on this server`, 404);
 
 
 }));

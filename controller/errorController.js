@@ -23,10 +23,10 @@ const sendErrorProd = (error, res) => {
             message,
         })
     }
-
+      console.log(error.name, error.message, stack);
     return res.status(500).json({
         status: 'error',
-        message: 'Something went wrong',
+        message: error.message,
     })
 };
 
