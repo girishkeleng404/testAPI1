@@ -1,6 +1,9 @@
 const express = require('express');
 const authRoute = require('./routes/authRoute.js');
 const dotenv = require('dotenv');
+const catchAsync = require('./utils/catchAsync.js');
+const AppError = require('./utils/appError.js');
+const { stack } = require('sequelize/lib/utils');
 
 const app = express();
 dotenv.config();
@@ -20,12 +23,22 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoute);
 
-app.use('*', (req, res, next) => {
-    res.status(404).json({
-        status: 'error',
-        message: 'Resource not found'
+app.use('*', catchAsync(async (req, res, next) => {
+    // return next( new Error('Resource not found'))
+    throw new AppError('Resource not found', 404);
+
+     
+}));
+
+
+app.use((err, req, res, next) => {
+    res.status(err.statusCode).json({
+        status: err.status,
+
+        message: err.message,
+        stack: err.stack,
     });
-});
+})
 
 app.listen(PORT, () => {
     console.log('Server is running on port', PORT);
