@@ -1,4 +1,4 @@
- 'use strict';
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -10,20 +10,47 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+
       userType: {
         type: Sequelize.ENUM('0', '1', '2'),
+
+
       },
       firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+
       },
       lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'email cannot be null'
+          },
+          notEmpty: {
+            msg: 'email cannot be empty'
+          },
+        }
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'password cannot be null'
+          },
+          notEmpty: {
+            msg: 'password cannot be empty'
+          },
+          isEmail: {
+            msg: 'Please enter valid email'
+          },
+        }
       },
       createdAt: {
         allowNull: false,
