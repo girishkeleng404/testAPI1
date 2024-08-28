@@ -97,6 +97,7 @@ module.exports = sequelize.define('project',{
   },
   category: {
     type: DataTypes.ARRAY(DataTypes.STRING),
+   allowNull:false,
     validate:{
       notEmpty:{
         msg: 'Category cannot be empty'
@@ -108,6 +109,7 @@ module.exports = sequelize.define('project',{
   },
   tags: {
     type: DataTypes.ARRAY(DataTypes.STRING),
+   allowNull:false,
     validate:{
       notEmpty:{
         msg: 'Tags cannot be empty'
@@ -134,5 +136,9 @@ module.exports = sequelize.define('project',{
     type: DataTypes.DATE
   }
 
+},{
+  paranoid:true,
+  freezeTableName:true,
+  tableName:'project',
 }
 )

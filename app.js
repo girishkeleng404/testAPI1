@@ -1,5 +1,6 @@
 const express = require('express');
 const authRoute = require('./routes/authRoute.js');
+const projectRoute = require('./routes/projectRoute');
 const dotenv = require('dotenv');
 const catchAsync = require('./utils/catchAsync.js');
 const AppError = require('./utils/appError.js');
@@ -15,6 +16,7 @@ app.use(express.json());
  
 
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/project', projectRoute);
 
 app.use('*', catchAsync(async (req, res, next) => {
     // return next( new Error('Resource not found'))
