@@ -94,12 +94,33 @@ const authentication = catchAsync(async(req, res, next)=>{
     // 2. token verification
     // 3. check user details from db and add to req object
 
-    let token = "";
-    if(req.headers.authorizarion && req.headers.authorizarion.startsWith('Bearer')){
-        idToken =
+
+
+     // 1. get token from header
+    let idToken = "";
+    if(req.headers.Authorizarion && req.headers.Authorizarion.startsWith('Bearer')){
+        //Bearer lksjoslllow#ljsosljd
+        idToken = req.headers.Authorizarion.split(' ')[1];
+    }
+    if(!idToken){
+          return next(new AppError('Please login to get access', 401))
     }
 
+
+      // 2. token verification
+      const tokenDetail = jwt.verify(idToken,process.env.JWT_SECRET_KEY);
+
+       // 3. check user details from db and add to req object
+       const freshUser = await user.findByPk(tokenDetail.id);
+
+       if(!freshUser){
+        return next(new AppError("User not found", 400))
+       }
+       req.user = freshUser;
+       return next();
+
+    
 }
 )
 
-module.exports = { signup, login }
+module.exports = { signup, login, authentication }
