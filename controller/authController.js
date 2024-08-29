@@ -88,4 +88,18 @@ const login = catchAsync(async (req, res, next) => {
 });
 
 
+
+const authentication = catchAsync(async(req, res, next)=>{
+    // 1. get token from header
+    // 2. token verification
+    // 3. check user details from db and add to req object
+
+    let token = "";
+    if(req.headers.authorizarion && req.headers.authorizarion.startsWith('Bearer')){
+        idToken =
+    }
+
+}
+)
+
 module.exports = { signup, login }
