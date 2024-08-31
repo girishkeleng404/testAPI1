@@ -97,12 +97,14 @@ const authentication = catchAsync(async(req, res, next)=>{
 
 
      // 1. get token from header
-    let idToken = "";
-    if(req.headers.Authorizarion && req.headers.Authorizarion.startsWith('Bearer')){
+    let idToken = '';
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         //Bearer lksjoslllow#ljsosljd
-        idToken = req.headers.Authorizarion.split(' ')[1];
+        idToken = req.headers.authorization.split(' ')[1];
+        console.log(idToken)
     }
     if(!idToken){
+     
           return next(new AppError('Please login to get access', 401))
     }
 
@@ -111,7 +113,7 @@ const authentication = catchAsync(async(req, res, next)=>{
       const tokenDetail = jwt.verify(idToken,process.env.JWT_SECRET_KEY);
 
        // 3. check user details from db and add to req object
-       const freshUser = await user.findByPk(tokenDetail.id);
+       const freshUser = user.findByPk(tokenDetail.id);
 
        if(!freshUser){
         return next(new AppError("User not found", 400))
