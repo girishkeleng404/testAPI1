@@ -15,7 +15,7 @@ const createProject = catchAsync(async(req,res,next)=>{
         productUrl: body.productUrl,
         category: body.category,
         tags: body.tags,
-        createdBy: 1,
+        createdBy: userId,
     });
 
     return res.status(201).json({
