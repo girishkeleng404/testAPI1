@@ -3,6 +3,7 @@ const catchAsync = require("../utils/catchAsync")
 
 const createProject = catchAsync(async(req,res,next)=>{
     const body = req.body;
+    const userId = req.user.id;
 
     const newProject = await project.create({
         title: body.title,

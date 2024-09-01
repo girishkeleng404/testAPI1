@@ -113,7 +113,7 @@ const authentication = catchAsync(async(req, res, next)=>{
       const tokenDetail = jwt.verify(idToken,process.env.JWT_SECRET_KEY);
 
        // 3. check user details from db and add to req object
-       const freshUser = user.findByPk(tokenDetail.id);
+       const freshUser = await user.findByPk(tokenDetail.id);
 
        if(!freshUser){
         return next(new AppError("User not found", 400))

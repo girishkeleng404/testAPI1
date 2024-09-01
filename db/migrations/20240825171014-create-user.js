@@ -27,30 +27,11 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         unique: true,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'email cannot be null'
-          },
-          notEmpty: {
-            msg: 'email cannot be empty'
-          },
-        }
+       
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'password cannot be null'
-          },
-          notEmpty: {
-            msg: 'password cannot be empty'
-          },
-          isEmail: {
-            msg: 'Please enter valid email'
-          },
-        }
+      
       },
       createdAt: {
         allowNull: false,
