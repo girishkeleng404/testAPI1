@@ -23,6 +23,16 @@ const createProject = catchAsync(async(req,res,next)=>{
         data:newProject
     });
     
+});
+
+
+const getAllProject = catchAsync(async(req,res,next)=>{
+    const result = await project.findAll();
+
+    return res.json({
+        status:"success",
+        data:result,
+    })
 })
 
-module.exports = createProject;
+module.exports = {createProject,getAllProject};
