@@ -48,6 +48,35 @@ const getProjectById = catchAsync(async(req,res,next)=>{
         status:"success",
         data:result,
     })
+});
+
+
+const upDateProject = catchAsync(async(req,res,next)=>{
+    const userId = req.user.id;
+    const projectId = req.params.id;
+    const body = req.body;
+
+    const result = await project.findByPk(projectId);
+
+    if(!result){
+        return next(new AppError('No project found with this id', 400));
+    }
+
+    result.title = body.title;
+    result.productImage = body.productImage;
+    result.price = body.price;
+    result.shortDescription = body.shortDescription;
+    result.description = body.description;
+    result.productUrl = body.productUrl;
+    result.category = body.category;
+    result.tags = body.tags;
+
+    const updatedResult = await result.save();
+    return res.json({
+        status:"success",
+        data:updatedResult,
+    })
+
 })
 
-module.exports = {createProject,getAllProject, getProjectById};
+module.exports = {createProject,getAllProject, getProjectById, upDateProject};
