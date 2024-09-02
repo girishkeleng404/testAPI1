@@ -1,5 +1,6 @@
 const project = require("../db/models/project");
 const user = require("../db/models/user");
+const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync")
 
 const createProject = catchAsync(async(req,res,next)=>{
@@ -35,5 +36,18 @@ const getAllProject = catchAsync(async(req,res,next)=>{
         data:result,
     })
 })
+const getProjectById = catchAsync(async(req,res,next)=>{
+    const projectId = req.params.id;
+    const result = await project.findByPk(projectId,{include: user});
 
-module.exports = {createProject,getAllProject};
+    if(!result){
+        return next (new AppError('No project found with this id', 400));
+    }
+
+    return res.json({
+        status:"success",
+        data:result,
+    })
+})
+
+module.exports = {createProject,getAllProject, getProjectById};
