@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.route('/')
 .post(authentication,restrictTo('1'), createProject)
-.get(authentication,getAllProject)
+.get(authentication,restrictTo('1'),getAllProject)
  
 router.route('/:id')
-.get(authentication,getProjectById)
-.patch(authentication, upDateProject)
-.delete(authentication, deleteProject);
+.get(authentication,restrictTo('1'),getProjectById)
+.patch(authentication, restrictTo('1'),upDateProject)
+.delete(authentication, restrictTo('1'),deleteProject);
 
 module.exports= router;
