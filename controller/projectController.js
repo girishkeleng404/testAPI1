@@ -56,7 +56,7 @@ const upDateProject = catchAsync(async(req,res,next)=>{
     const projectId = req.params.id;
     const body = req.body;
 
-    const result = await project.findByPk(projectId);
+    const result = await project.findOne({where:{id:projectId, createdBy:userId}});
 
     if(!result){
         return next(new AppError('No project found with this id', 400));
@@ -72,6 +72,25 @@ const upDateProject = catchAsync(async(req,res,next)=>{
     result.tags = body.tags;
 
     const updatedResult = await result.save();
+    return res.json({
+        status:"success",
+        data:updatedResult,
+    })
+
+})
+const deleteProject = catchAsync(async(req,res,next)=>{
+    const userId = req.user.id;
+    const projectId = req.params.id;
+    const body = req.body;
+
+    const result = await project.findOne({where:{id:projectId, createdBy:userId}});
+
+    if(!result){
+        return next(new AppError('No project found with this id', 400));
+    }
+
+
+    const updatedResult = await result.destroy();
     return res.json({
         status:"success",
         data:updatedResult,
