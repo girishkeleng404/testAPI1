@@ -36,7 +36,9 @@ const getAllProject = catchAsync(async (req, res, next) => {
         status: "success",
         data: result,
     })
-})
+});
+
+
 const getProjectById = catchAsync(async (req, res, next) => {
     const projectId = req.params.id;
     const result = await project.findByPk(projectId, { include: user });
