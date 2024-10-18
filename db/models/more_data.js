@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const Project = require("./project");
+// const Project = require("./project");
 
 module.exports = (sequelize) => {
   const MoreData = sequelize.define('more_data', {

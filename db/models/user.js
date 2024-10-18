@@ -106,10 +106,12 @@ const user = sequelize.define('user', {
   modelName: 'user',
 });
 
-
-user.hasMany(project, {foreignKey: 'createdBy'});
-project.belongsTo(user,{
-  foreignKey: 'createdBy',
-})
+user.associate=(models)=>{
+ 
+  user.hasMany(models.project, {foreignKey: 'createdBy'});
+  project.belongsTo(user,{
+    foreignKey: 'createdBy',
+  })
+}
 
 module.exports = user;
