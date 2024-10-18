@@ -1,3 +1,5 @@
+const sequelize = require("../config/database");
+const more_data = require("../db/models/more_data");
 const project = require("../db/models/project");
 const user = require("../db/models/user");
 const AppError = require("../utils/appError");
@@ -6,24 +8,37 @@ const catchAsync = require("../utils/catchAsync")
 const createProject = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
+    const t = sequelize.transaction();
+    // const newProject = await project.create({
+    //     title: body.title,
+    //     // isFeatured: body.isFeatured,
+    //     productImage: body.productImage,
+    //     price: body.price,
+    //     shortDescription: body.shortDescription,
+    //     description: body.description,
+    //     productUrl: body.productUrl,
+    //     category: body.category,
+    //     tags: body.tags,
+    //     createdBy: userId,
+    // });
 
-    const newProject = await project.create({
-        title: body.title,
-        // isFeatured: body.isFeatured,
-        productImage: body.productImage,
-        price: body.price,
-        shortDescription: body.shortDescription,
-        description: body.description,
-        productUrl: body.productUrl,
-        category: body.category,
-        tags: body.tags,
-        createdBy: userId,
-    });
+    // return res.status(201).json({
+    //     status: "success",
+    //     data: newProject
+    // });
 
-    return res.status(201).json({
-        status: "success",
-        data: newProject
-    });
+   
+try{
+    const newProject = await project.create({...body.project, createdBy:userId},{transaction: t})
+    const newMoreData = await more_data.create({...body.more_data, product_id: newProject.id}, {transaction:t})
+
+    (await t).commit();
+
+}catch(err){
+    (await t).rollback();
+    return next(new AppError(err.message, 400));
+}
+
 
 });
 
