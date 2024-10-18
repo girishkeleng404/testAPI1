@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 
-module.exports =(sequelize)=>{
+module.exports = (sequelize) => {
 
   const Project = sequelize.define('project', {
     id: {
@@ -137,14 +137,16 @@ module.exports =(sequelize)=>{
     freezeTableName: true,
     tableName: 'project'
   });
-  
+
   // Correct association setup outside define block
-  
+
   Project.associate = (models) => {
 
 
     Project.belongsTo(models.user, {
-      foreignKey: 'createdBy'
+      foreignKey: 'createdBy',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
     });
 
     Project.hasMany(models.MoreData, {
@@ -157,7 +159,7 @@ module.exports =(sequelize)=>{
 
   return Project;
 
-}  
+}
 
 
 

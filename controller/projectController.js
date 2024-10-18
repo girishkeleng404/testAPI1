@@ -1,7 +1,7 @@
 const sequelize = require("../config/database");
 const more_data = require("../db/models");
 const project = require("../db/models");
-const user = require("../db/models/user");
+const user = require("../db/models");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync")
 
@@ -32,7 +32,7 @@ try{
     const newProject = await project.create({...body.project, createdBy:userId},{transaction: t})
     const newMoreData = await more_data.create({...body.more_data, product_id: newProject.id}, {transaction:t})
 
-    (await t).commit();
+    await t.commit();
     return res.status(201).json({
       status: "success",
       data: newProject,
