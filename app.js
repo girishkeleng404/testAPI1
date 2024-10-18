@@ -31,6 +31,8 @@ app.use('*', catchAsync(async (req, res, next) => {
 
 app.use( globleErrorHandler);
 
+
+
 app.listen(PORT, () => {
     console.log('Server is running on port', PORT);
 });

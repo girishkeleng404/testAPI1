@@ -25,7 +25,7 @@ const sendErrorProd = (error, res) => {
             message,
         })
     }
-      console.log(error.name, error.message, stack);
+    console.log(error.name, error.message, stack);
     return res.status(500).json({
         status: 'error',
         message: error.message,
@@ -34,16 +34,16 @@ const sendErrorProd = (error, res) => {
 
 
 const globleErrorHandler = (err, req, res, next) => {
-  
-if(err.name === 'JsonWebTokenError'){
-    err = new AppError("Invalid token",401)
-}
-if(err.name === 'SequelizeUniqueConstraintError'){
-    err = new AppError(err.errors[0].message,400)
-}
-if(err.name === 'SequelizeValidationError'){
-    err = new AppError(err.errors[0].message,400)
-}
+
+    if (err.name === 'JsonWebTokenError') {
+        err = new AppError("Invalid token", 401)
+    }
+    if (err.name === 'SequelizeUniqueConstraintError') {
+        err = new AppError(err.errors[0].message, 400)
+    }
+    if (err.name === 'SequelizeValidationError') {
+        err = new AppError(err.errors[0].message, 400)
+    }
     if (process.env.NODE_ENV === 'development') {
         return sendErrorDev(err, res);
     }
