@@ -3,6 +3,7 @@ const { Model, Sequelize, DataTypes } = require('sequelize');
 
 const bcrypt = require('bcrypt');
 const AppError = require('../../utils/appError');
+const project = require('./project');
 // const project = require('./project');
 
 
@@ -113,10 +114,9 @@ module.exports = (sequelize) => {
 
   user.associate = (models) => {
 
-    user.hasMany(models.Project, { foreignKey: 'createdBy' });
-    project.belongsTo(user, {
-      foreignKey: 'createdBy',
-    })
+    user.hasMany(models.project, { foreignKey: 'createdBy' });
+
+    
   };
 
 

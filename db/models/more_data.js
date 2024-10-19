@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 // const Project = require("./project");
 
 module.exports = (sequelize) => {
-  const MoreData = sequelize.define('more_data', {
+  const more_data = sequelize.define('more_data', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -41,12 +41,12 @@ module.exports = (sequelize) => {
 
   // Correct belongsTo association
 
-  MoreData.associate=(models)=>{
+  more_data.associate=(models)=>{
 
-    MoreData.belongsTo(models.Project, {
+    more_data.belongsTo(models.project, {
       foreignKey: 'product_id'
     });
   }
 
-  return MoreData;
+  return more_data;
 };

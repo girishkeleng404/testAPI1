@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
 
-  const Project = sequelize.define('project', {
+  const project = sequelize.define('project', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -140,16 +140,16 @@ module.exports = (sequelize) => {
 
   // Correct association setup outside define block
 
-  Project.associate = (models) => {
+  project.associate = (models) => {
 
 
-    Project.belongsTo(models.user, {
+    project.belongsTo(models.user, {
       foreignKey: 'createdBy',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
 
-    Project.hasMany(models.MoreData, {
+    project.hasMany(models.more_data, {
       foreignKey: 'product_id',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
@@ -157,7 +157,7 @@ module.exports = (sequelize) => {
   };
 
 
-  return Project;
+  return project;
 
 }
 
