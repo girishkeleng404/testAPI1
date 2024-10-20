@@ -100,7 +100,7 @@ module.exports = (sequelize) => {
   }, {
     paranoid: true,
     freezeTableName: true,
-    tableName: 'dynamicTable1s',
+    tableName: 'dynamicTable1',
     timestamps: true
   })
 

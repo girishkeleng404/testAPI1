@@ -36,12 +36,13 @@ module.exports = (sequelize) => {
     }
   }, {
     freezeTableName: true,
-    tableName: 'more_data' // Table name as a string
+    tableName: 'more_data', // Table name as a string
+    timestamps: true
   });
 
   // Correct belongsTo association
 
-  more_data.associate=(models)=>{
+  more_data.associate = (models) => {
 
     more_data.belongsTo(models.project, {
       foreignKey: 'product_id'
