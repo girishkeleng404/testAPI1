@@ -154,6 +154,13 @@ module.exports = (sequelize) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
+
+    project.hasMany(models.dynamicTable1, {
+      foreignKey: 'product_id',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+    })
+
   };
 
 
