@@ -1,6 +1,6 @@
 const { where } = require("sequelize");
 const sequelize = require("../config/database");
-const { more_data, project, user } = require("../db/models");
+const { more_data, project, user, dynamictable1 } = require("../db/models");
 const db = require("../db/models");
 // const user = require("../db/models");
 const AppError = require("../utils/appError");
@@ -11,23 +11,6 @@ const createProject = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
     const t = await sequelize.transaction();
-    // const newProject = await project.create({
-    //     title: body.title,
-    //     // isFeatured: body.isFeatured,
-    //     productImage: body.productImage,
-    //     price: body.price,
-    //     shortDescription: body.shortDescription,
-    //     description: body.description,
-    //     productUrl: body.productUrl,
-    //     category: body.category,
-    //     tags: body.tags,
-    //     createdBy: userId,
-    // });
-
-    // return res.status(201).json({
-    //     status: "success",
-    //     data: newProject
-    // });
 
     try {
         const newProject = await project.create(
@@ -81,10 +64,10 @@ const includeAssociate = [
         model: more_data,
         attributes: { exclude: ["id", "createdAt", "updatedAt"] },
     },
-    // {
-    // model: dynamictable1,
-    // attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
-    // },
+    {
+    model: dynamictable1,
+    attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+    },
     {
         model: user,
         attributes: {
