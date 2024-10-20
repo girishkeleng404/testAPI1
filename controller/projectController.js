@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const sequelize = require("../config/database");
 const { more_data, project, user } = require("../db/models");
 // const project = require("../db/models");
@@ -54,15 +55,15 @@ const createProject = catchAsync(async (req, res, next) => {
 });
 
 const includeAssociate = [
-            {
-                model: more_data,
-                attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
-            },
-            { 
-                model: user, 
-                attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt', 'deletedAt'] },
-            },
-        
+    {
+        model: more_data,
+        attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+    },
+    {
+        model: user,
+        attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt', 'deletedAt'] },
+    },
+
 ]
 
 const getAllProject = catchAsync(async (req, res, next) => {
@@ -105,19 +106,45 @@ const upDateProject = catchAsync(async (req, res, next) => {
         return next(new AppError('No project found with this id', 400));
     }
 
-    result.title = body.title;
-    result.productImage = body.productImage;
-    result.price = body.price;
-    result.shortDescription = body.shortDescription;
-    result.description = body.description;
-    result.productUrl = body.productUrl;
-    result.category = body.category;
-    result.tags = body.tags;
+    result.title = body.project.title;
+    result.productImage = body.project.productImage;
+    result.price = body.project.price;
+    result.shortDescription = body.project.shortDescription;
+    result.description = body.project.description;
+    result.productUrl = body.project.productUrl;
+    result.category = body.project.category;
+    result.tags = body.project.tags;
 
     const updatedResult = await result.save();
+
+
+    if (body.more_data) {
+        for (const moreDataItem of body.more_data) {
+            if (moreDataItem.id) {
+                const moreData = await more_data.findOne({ where: { id: moreDataItem.id, product_id: updatedResult.id } })
+
+                if (moreData) {
+                    moreData.moreData_1 = moreDataItem.moreData_1;
+                    moreData.moreData_2 = moreDataItem.moreData_2;
+                    await moreData.save();
+                }
+                else {
+                    return next(new AppError(`No associated more_data found with id: ${moreDataItem.id}`, 400));
+                }
+
+            } else{
+                await more_data.create({ ...moreDataItem, product_id: updatedResult.id });
+            }
+
+        }
+    }
+
+
+ const updatedProjectWithMoreData = await project.findByPk(updatedResult.id,{include: includeAssociate});
+
     return res.json({
         status: "success",
-        data: updatedResult,
+        data: updatedProjectWithMoreData,
     })
 
 })
