@@ -1,5 +1,5 @@
 const sequelize = require("../config/database");
-const {more_data,project, user} = require("../db/models");
+const { more_data, project, user } = require("../db/models");
 // const project = require("../db/models");
 // const user = require("../db/models");
 const AppError = require("../utils/appError");
@@ -27,27 +27,28 @@ const createProject = catchAsync(async (req, res, next) => {
     //     data: newProject
     // });
 
-   
-try{
-    // console.log(userId + " and " + JSON.stringify(body));
 
-    const newProject = await project.create({...body.project, createdBy:userId},{transaction: t})
-    console.log(newProject);
-    const newMoreData = await more_data.create({...body.more_data, product_id: newProject.id}, {transaction:t})
-    
-    await t.commit();
-    return res.status(201).json({
-      status: "success",
-      data: {newProject,
-        newMoreData
-      }
-    });
+    try {
+        // console.log(userId + " and " + JSON.stringify(body));
+
+        const newProject = await project.create({ ...body.project, createdBy: userId }, { transaction: t })
+        console.log(newProject);
+        const newMoreData = await more_data.create({ ...body.more_data, product_id: newProject.id }, { transaction: t })
+
+        await t.commit();
+        return res.status(201).json({
+            status: "success",
+            data: {
+                newProject,
+                newMoreData
+            }
+        });
 
 
-}catch(err){
-    (await t).rollback();
-    return next(new AppError(err.message, 400));
-}
+    } catch (err) {
+        (await t).rollback();
+        return next(new AppError(err.message, 400));
+    }
 
 
 });
@@ -55,7 +56,19 @@ try{
 
 const getAllProject = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
-    const result = await project.findAll({ include: user, where:{createdBy:userId} });
+    const result = await project.findAll({
+        include: [
+            {
+                model: more_data,
+                attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+            },
+            { 
+                model: user, 
+                attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt', 'deletedAt'] },
+            },
+        ],
+        where: { createdBy: userId }
+    });
 
     return res.json({
         status: "success",
