@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 
-
 module.exports = (sequelize) => {
 
   const project = sequelize.define('project', {
@@ -135,7 +134,8 @@ module.exports = (sequelize) => {
   }, {
     paranoid: true,
     freezeTableName: true,
-    tableName: 'project'
+    tableName: 'project',
+    timestamps: true
   });
 
   // Correct association setup outside define block

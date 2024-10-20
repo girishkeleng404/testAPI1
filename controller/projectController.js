@@ -1,14 +1,14 @@
 const sequelize = require("../config/database");
-const more_data = require("../db/models");
-const project = require("../db/models");
-const user = require("../db/models");
+const {more_data,project, user} = require("../db/models");
+// const project = require("../db/models");
+// const user = require("../db/models");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync")
 
 const createProject = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
-    const t = sequelize.transaction();
+    const t = await sequelize.transaction();
     // const newProject = await project.create({
     //     title: body.title,
     //     // isFeatured: body.isFeatured,
@@ -29,13 +29,18 @@ const createProject = catchAsync(async (req, res, next) => {
 
    
 try{
-    const newProject = await project.create({...body.project, createdBy:userId},{transaction: t})
-    const newMoreData = await more_data.create({...body.more_data, product_id: newProject.id}, {transaction:t})
+    // console.log(userId + " and " + JSON.stringify(body));
 
+    const newProject = await project.create({...body.project, createdBy:userId},{transaction: t})
+    console.log(newProject);
+    const newMoreData = await more_data.create({...body.more_data, product_id: newProject.id}, {transaction:t})
+    
     await t.commit();
     return res.status(201).json({
       status: "success",
-      data: newProject,
+      data: {newProject,
+        newMoreData
+      }
     });
 
 

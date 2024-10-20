@@ -3,7 +3,7 @@ const { Model, Sequelize, DataTypes } = require('sequelize');
 
 const bcrypt = require('bcrypt');
 const AppError = require('../../utils/appError');
-const project = require('./project');
+// const project = require('./project');
 // const project = require('./project');
 
 
