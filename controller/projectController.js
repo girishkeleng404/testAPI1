@@ -53,11 +53,7 @@ const createProject = catchAsync(async (req, res, next) => {
 
 });
 
-
-const getAllProject = catchAsync(async (req, res, next) => {
-    const userId = req.user.id;
-    const result = await project.findAll({
-        include: [
+const includeAssociate = [
             {
                 model: more_data,
                 attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
@@ -66,7 +62,13 @@ const getAllProject = catchAsync(async (req, res, next) => {
                 model: user, 
                 attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt', 'deletedAt'] },
             },
-        ],
+        
+]
+
+const getAllProject = catchAsync(async (req, res, next) => {
+    const userId = req.user.id;
+    const result = await project.findAll({
+        include: includeAssociate,
         where: { createdBy: userId }
     });
 
@@ -79,7 +81,7 @@ const getAllProject = catchAsync(async (req, res, next) => {
 
 const getProjectById = catchAsync(async (req, res, next) => {
     const projectId = req.params.id;
-    const result = await project.findByPk(projectId, { include: user });
+    const result = await project.findByPk(projectId, { include: includeAssociate });
 
     if (!result) {
         return next(new AppError('No project found with this id', 400));
