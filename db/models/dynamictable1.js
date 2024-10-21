@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
     },
     product_id: {
       type: DataTypes.INTEGER,
-      allowNull:false,
+      allowNull: false,
       references: {
         model: 'project',
         key: 'id'
@@ -107,7 +107,8 @@ module.exports = (sequelize) => {
 
   dynamicTable1.associate = (models) => {
     dynamicTable1.belongsTo(models.project, {
-      foreignKey: 'product_id'
+      foreignKey: 'product_id',
+      paranoid: true,
     })
   }
 

@@ -2,10 +2,11 @@ const { where } = require("sequelize");
 const sequelize = require("../config/database");
 const { more_data, project, user, dynamicTable1 } = require("../db/models");
 const db = require("../db/models");
-// const user = require("../db/models");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
-// const dynamictable1 = require("../db/models/dynamictable1");
+
+
+
 
 const createProject = catchAsync(async (req, res, next) => {
     const body = req.body;
@@ -54,7 +55,7 @@ const createProject = catchAsync(async (req, res, next) => {
             },
         });
     } catch (err) {
-        (await t).rollback();
+        await t.rollback();
         return next(new AppError(err.message, 400));
     }
 });
@@ -143,15 +144,6 @@ const upDateProject = catchAsync(async (req, res, next) => {
                 if (Array.isArray(records)) {
                     console.log("Records found for table:", tableName, records); // Log records
 
-                    // for (const record of records) {
-                    //     const Model = db[tableName];
-                    //     if (Model && typeof Model.upsert === 'function') {
-                    //         await Model.upsert({ ...record, product_id: updatedResult.id }, { transaction: t })
-                    //     } else {
-                    //         console.error(`Model ${tableName} does not have a upsert function or could not be found.`)
-                    //     }
-                    // }
-
                     for (const record of records) {
                         const Model = db[tableName];
                         if (Model) {
@@ -231,21 +223,36 @@ const deleteProject = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
     const projectId = req.params.id;
     const body = req.body;
+    const t = await sequelize.transaction();
 
-    const result = await project.findOne({
-        where: { id: projectId, createdBy: userId },
-    });
+    try {
 
-    if (!result) {
-        return next(new AppError("No project found with this id", 400));
+        const result = await project.findOne({
+            where: { id: projectId, createdBy: userId },
+            transaction: t,
+        });
+
+        if (!result) {
+            return next(new AppError("No project found with this id", 400));
+        }
+
+        await result.destroy({ transaction: t });
+
+        await t.commit();
+        return res.json({
+            status: "success",
+            message: "Project deleted successfully",
+        });
+    } catch (error) {
+       await t.rollback();
+       return next(new AppError(error.message, 400))
     }
 
-    await result.destroy();
-    return res.json({
-        status: "success",
-        message: "Project deleted successfully",
-    });
 });
+
+
+
+
 
 module.exports = {
     createProject,

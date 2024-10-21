@@ -150,12 +150,14 @@ module.exports = (sequelize) => {
     });
 
     project.hasMany(models.more_data, {
+      paranoid: true,
       foreignKey: 'product_id',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
 
     project.hasMany(models.dynamicTable1, {
+      paranoid: true,
       foreignKey: 'product_id',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'

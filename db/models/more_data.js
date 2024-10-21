@@ -33,8 +33,12 @@ module.exports = (sequelize) => {
     updatedAt: {
       allowNull: false,
       type: DataTypes.DATE
+    },
+    deletedAt:{
+      type: DataTypes.DATE,
     }
   }, {
+    paranoid: true,
     freezeTableName: true,
     tableName: 'more_data', // Table name as a string
     timestamps: true
@@ -45,7 +49,8 @@ module.exports = (sequelize) => {
   more_data.associate = (models) => {
 
     more_data.belongsTo(models.project, {
-      foreignKey: 'product_id'
+      foreignKey: 'product_id',
+      paranoid: true,
     });
   }
 
