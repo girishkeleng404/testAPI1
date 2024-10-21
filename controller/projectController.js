@@ -1,6 +1,6 @@
 const { where } = require("sequelize");
 const sequelize = require("../config/database");
-const { more_data, project, user, dynamictable1 } = require("../db/models");
+const { more_data, project, user, dynamicTable1 } = require("../db/models");
 const db = require("../db/models");
 // const user = require("../db/models");
 const AppError = require("../utils/appError");
@@ -65,7 +65,7 @@ const includeAssociate = [
         attributes: { exclude: ["id", "createdAt", "updatedAt"] },
     },
     {
-    model: dynamictable1,
+    model: dynamicTable1,
     attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
     },
     {
@@ -74,7 +74,7 @@ const includeAssociate = [
             exclude: ["id", "password", "createdAt", "updatedAt", "deletedAt"],
         },
     },
-];
+].filter(Boolean); // Filter out falsey values (like undefined)
 
 const getAllProject = catchAsync(async (req, res, next) => {
     const userId = req.user.id;
