@@ -229,6 +229,10 @@ const deleteProject = catchAsync(async (req, res, next) => {
 
         const result = await project.findOne({
             where: { id: projectId, createdBy: userId },
+             include: [
+                { model: more_data},  // Include soft-deleted records
+                { model: dynamicTable1},
+            ],
             transaction: t,
         });
 
@@ -236,7 +240,11 @@ const deleteProject = catchAsync(async (req, res, next) => {
             return next(new AppError("No project found with this id", 400));
         }
 
-        await result.destroy({ transaction: t });
+
+        console.log(result.more_data);
+        console.log(result.dynamicTable1);
+
+        await result.destroy({force:true, transaction: t });
 
         await t.commit();
         return res.json({
@@ -244,8 +252,8 @@ const deleteProject = catchAsync(async (req, res, next) => {
             message: "Project deleted successfully",
         });
     } catch (error) {
-       await t.rollback();
-       return next(new AppError(error.message, 400))
+        await t.rollback();
+        return next(new AppError(error.message, 400))
     }
 
 });
